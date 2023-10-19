@@ -1,0 +1,57 @@
+<!-- Modal -->
+<div class="modal fade" id="NoteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title m-3 fs-1 fw-bold" id="exampleModalLabel">{{modalTitle}}</h1>
+        </div>
+        <div class="modal-body">
+            <form #noteForm="ngForm">
+                <div class="mb-3">
+                  <label for="title" class="col-form-label">Title:</label>
+                  <input type="text" class="form-control"  [(ngModel)]="note.title" name="title" required #title2="ngModel" maxlength="40">
+                  <div class="alert alert-danger mt-1" *ngIf="title2.invalid && (title2.dirty||title2.touched)">
+                    <div *ngIf="title2 && title2.errors && title2.errors['required']">
+                      The title is required
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="content" class="col-form-label">Content:</label>
+                  <textarea class="form-control" [(ngModel)]="note.content" name="content"  #content="ngModel"></textarea >
+                </div>
+
+                <!-- Categories -->
+                <div class="mb-1" >
+                  <label for="content" class="col-form-label">Categories:</label>
+                </div>
+                <div class="border overflow-auto" style="height: 100px; width: 465px;" >
+                  <div class="form-check m-1" *ngFor="let category of categories">
+                    <input class="form-check-input" type="checkbox"  [checked]="isCategorySelectedInCheckBox(category)" (change)="toggleCategorySelection(category)" name="category{{category.id}}">
+                    <label class="form-check-label" for="flexCheckDefault" >
+                      {{category.name}}
+                    </label>
+                  </div>
+                </div>
+                <div class="row d-flex align-items-center">
+                  <div class="col-7">
+                    <input type="text" class="form-control" maxlength="40" placeholder="New name category" [(ngModel)]="newNameCategoryInput" name="categoryName">
+                  </div>
+                  <div class="col-5">
+                    <button type="button" class="btn btn-outline-dark m-3 btn-shadow rounded-0" (click)="createCategory()" >Add Category</button>
+                  </div>
+                </div>       
+            </form>  
+        </div>
+        <div class="modal-footer">
+          <div class="mb-3 text-end">
+            <button type="button" class="btn btn-outline-dark m-3 btn-shadow rounded-0 " data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-outline-dark m-3 btn-shadow rounded-0 " role="button" data-bs-dismiss="modal" (click)="createNote()" *ngIf="!note.id else elseBlock" [disabled]="!noteForm.form.valid">Create</button>
+            <ng-template #elseBlock>
+              <button class="btn btn-outline-dark m-3 btn-shadow rounded-0 " role="button" data-bs-dismiss="modal" (click)="updateNote()" [disabled]="!noteForm.form.valid">Edit</button>
+            </ng-template>
+          </div>
+        </div> 
+      </div>
+    </div>
+  </div>

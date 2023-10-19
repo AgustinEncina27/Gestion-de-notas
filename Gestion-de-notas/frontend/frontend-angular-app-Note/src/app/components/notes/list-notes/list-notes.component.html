@@ -1,0 +1,9 @@
+<div class="d-inline p-2 d-flex align-items-center">
+    <label class="m-3 fs-1 fw-bold">My notes</label>
+    <button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" class="btn btn-outline-dark m-3 btn-shadow rounded-0" data-bs-toggle="modal" data-bs-target="#NoteModal">Create note</button>
+    <a routerLink="/archivedNotes" class="m-3 fw-bold">Archived notes</a>
+</div>
+
+<app-note></app-note>
+
+<app-modal-form></app-modal-form>

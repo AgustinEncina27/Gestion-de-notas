@@ -1,0 +1,35 @@
+<div class="d-flex flex-wrap m-2 alert alert-info" *ngIf="notes.length==0 && getCurrentRoute()=='archivedNotes'">
+    No archived notes found
+</div>
+<div class="d-flex flex-wrap m-2 alert alert-info" *ngIf="notes.length==0 && getCurrentRoute()=='listNotes'">
+    No unarchived notes found
+</div>
+<div class="d-flex flex-wrap p-2" *ngIf="notes.length>0">
+    <div class="border border-4 m-3 border-black" style="width: 500px; height: 100px;" *ngFor="let note of notes" >
+        
+        <img src="/assets/icons/sticky-fill.svg" alt="Bootstrap"  style="width: 20%; height: 100%;" class="rounded float-start ms- ">
+        
+        <label class="m-2" style="width: 40%; height: 100%;">{{note.title}} <br>Last edited:{{note.lastEdit}}</label>
+        
+        <a  style="cursor: pointer;" *ngIf="note.archived==true && authService.hasRole('ROLE_ADMIN') else elseBloc" (click)="archivedFalse(note)"  >
+            <img src="/assets/icons/archive-fill.svg" alt="Bootstrap" style="width: 10%; height: 20px;" class="align-items-end ms-4">
+        </a>
+        <ng-template #elseBloc>
+            <a *ngIf="authService.hasRole('ROLE_ADMIN')" style="cursor: pointer;"  (click)="archivedTrue(note)" data-bs-toggle="tooltip" data-bs-title="Default tooltip">
+                <img src="/assets/icons/upload.svg" alt="Bootstrap" style="width: 10%; height: 20px;" class="align-items-end ms-4">
+            </a>
+        </ng-template>
+        <a *ngIf="authService.hasRole('ROLE_ADMIN')" style="cursor: pointer;"  data-bs-toggle="modal"  data-bs-target="#NoteModal" [attr.data-bs-whatever]="note.id" >
+            <img src="/assets/icons/pencil-fill.svg" alt="Bootstrap" 
+            style="width: 10%; height: 20px;" class="align-items-end">
+        </a>
+        <a *ngIf="authService.hasRole('ROLE_ADMIN')" style="cursor: pointer;" (click)="deleteNote(note)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top">
+            <img src="/assets/icons/trash3-fill.svg" alt="Bootstrap"  style="width: 10%; height: 20px;"
+             class="align-items-end">
+        </a>
+    </div>      
+</div>
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>
